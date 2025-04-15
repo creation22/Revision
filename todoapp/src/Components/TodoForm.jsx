@@ -1,28 +1,43 @@
 import React, { useState } from "react";
-import useTodo from '../contests/index'
+import { motion } from "framer-motion";
+import { useTodo } from "../contests/index";
+
 function TodoForm() {
-  const [todo , setTodo] = useState("")
-  const {addTodo} = useTodo()
+  const [todo, setTodo] = useState("");
+  const { addTodo } = useTodo();
 
   const add = (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    const trimmed = todo.trim();
+    if (!trimmed) return;
+    addTodo({ todo: trimmed, completed: false });
+    setTodo("");
+  };
 
-    if (!todo) return 
-  }
   return (
-    <form className="flex">
+    <motion.form
+      onSubmit={add}
+      className="flex items-center gap-2"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       <input
         type="text"
-        placeholder="Write Todo..."
-        className="w-full border border-black/10 rounded-l-lg px-3 outline-none duration-150 bg-white/20 py-1.5"
+        placeholder="Write your todo..."
+        className="w-full rounded-lg px-4 py-2 bg-white/20 text-white placeholder:text-white/60 border border-white/10 focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300"
+        value={todo}
+        onChange={(e) => setTodo(e.target.value)}
       />
-      <button
+      <motion.button
         type="submit"
-        className="rounded-r-lg px-3 py-1 bg-green-600 text-white shrink-0"
+        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.05 }}
+        className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition duration-300"
       >
         Add
-      </button>
-    </form>
+      </motion.button>
+    </motion.form>
   );
 }
 
